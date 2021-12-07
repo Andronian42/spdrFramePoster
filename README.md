@@ -28,12 +28,12 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 1. Clone the repository to any working directory (don't be that weirdo who runs their scripts from their downloads folder)
 2. Add video files to repository folder
 3. Add all necessary information to movies.toml regarding video files (read the documentation in that file for more information)
-4. <SECRETS>
+4. \<SECRETS\>
 5. Run the main frameposter.py script manually or with your favorite scheduling application, e.g. cron
 ### Syntax
-> python frameposter.py <film number>
+> python frameposter.py \<film number\>
  
-<film number> should be the number corresponding to one of the films you added to movies.toml
+\<film number\> should be the number corresponding to one of the films you added to movies.toml
 ### Result
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll probably remove in the future) and a frame will soon be posted on your Twitter account. 
 ### Troubleshooting
