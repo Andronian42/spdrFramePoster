@@ -43,4 +43,5 @@ I haven't implemented a lot of error handling yet, and I'm not sure how well thi
  - Dependencies (make sure you have all of them properly installed for Python 3)
  - Python version (make sure you're on Python 3.*
  - Twitter account (make sure everything's alright there)
+ 
 If none of these work or you're just generally pissed about the sorry state of this program, submit a GitHub issue and I'll happily try to get your problem resolved.
