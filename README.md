@@ -14,7 +14,7 @@ This is my first public repository, and also isn't necessarily a normal script r
 
 I am not responsible for DMCA takedowns, account suspensions, accidental file deletions, spider-related accidents, etc. caused by this script or its usage.
 
-This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would like to be informed of other accounts that use this script.
+This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would like to be informed of other accounts that use this script. Because that would be cool.
 ## Usage
 (this section is a work in progress, and I wouldn't necessarily recommend listening to its advice until I'm completely sure I'm doing this right)
 ### Dependencies
