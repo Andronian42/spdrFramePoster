@@ -2,7 +2,7 @@
 # If you don't have any, sign up here and get them: https://developer.twitter.com/
 # Just fill in all necessary info here and rename the file to secrets.py
 # DO NOT SHARE THIS INFO WITH ANYBODY
-# DO NOT PUSH THIS INFO TO THE REPOSITORY! IT'S HERE FOR A REASON!
+# DO NOT PUSH THIS INFO TO THE REPOSITORY! secrets.py IS IN gitignore FOR A REASON!
 # Example (NOT REAL VALUES. DO NOT USE THESE):
 #
 # credentials = {
