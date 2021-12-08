@@ -33,7 +33,7 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 ### Syntax
 > python frameposter.py \<film number\>
  
-\<film number\> should be the number corresponding to one of the films you added to movies.toml
+\<film number\> should be the number corresponding to one of the films you added to movies.toml (whatever you put in the brackets)
 ### Result
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll probably remove in the future) and a frame will soon be posted on your Twitter account. 
 ### Troubleshooting
