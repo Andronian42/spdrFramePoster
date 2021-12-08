@@ -1,0 +1,45 @@
+# This is where you'll have to manually insert information about the videos you'll be extracting frames from.
+# I know, it's tedious, but ffprobe is too slow for my needs. If I find something faster, I'll replace this with that. I swear.
+# Fill in information about the movies you'll be posting, then rename this file to movies.toml
+# DO NOT PUSH THE FINISHED FILE TO THE REPO! It's not as much a security risk as with secrets.py, but it would still suck.
+# I'll go over every individual veriable here:
+# filename - Movie filename
+# filmframes - Number of frames in the file
+# filmname - Name of film
+# framerate - Framerate, provided as a fraction
+# filmhdr - Whether the video uses HDR or not
+# filmcroptb - The total number of pixels to crop from the top and bottom combined (for letterboxed videos)
+# filmcroplr - The total number of pixels to crop from the left and right combined (for letterboxed videos)
+# filmnopost - Ranges of frames where the script should not post from. Should be a list of nested lists consisting of [start, end] frames in range of frames that should not be posted, inclusive.
+# 
+# The following is an example of a toml file that might be used on my own bot:
+#
+# [0]
+# filename = 'movie0.mkv'
+# filmframes = 168072
+# filmname = "Into The Spider-Verse"
+# framerate = '24000/1001'
+# filmhdr = true
+# filmcroptb = 552
+# filmcroplr = 0
+# filmnopost = [[1,1538], [1593,1638], [1710,1757],[1789,1829],[151630,151693],[156011,166125],[167856,168072]]
+# [1]
+# filename = 'movie1.mkv'
+# filmframes = 146856
+# filmname = "NBC Mystery Movie"
+# framerate = '24000/1001'
+# filmhdr = false
+# filmcroptb = 0
+# filmcroplr = 0
+# filmnopost = []
+#
+# NOTE: When invoking frameposter.py, you'll be using the value in the brackets as your argument to select a film.
+[0]
+filename = ''
+filmframes = 42
+filmname = ""
+framerate = '24000/1001'
+filmhdr = false
+filmcroptb = 0
+filmcroplr = 0
+filmnopost = []
