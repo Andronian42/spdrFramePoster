@@ -133,3 +133,12 @@ secrets.py
 
 # Movies
 movies.toml
+
+# Video files
+*.mkv
+*.mp4
+*.mov
+*.avi
+
+# Images
+*.jpg
