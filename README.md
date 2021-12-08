@@ -27,8 +27,8 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 ### Setup
 1. Clone the repository to any working directory (don't be that weirdo who runs their scripts from their downloads folder)
 2. Add video files to repository folder
-3. Add all necessary information to movies.toml regarding video files (read the documentation in that file for more information)
-4. \<SECRETS\>
+3. Add all necessary information to a movies.toml file regarding video files (read the documentation in that file for more information)
+4. Create a secrets.py file with all relevant API credentials
 5. Run the main frameposter.py script manually or with your favorite scheduling application, e.g. cron
 ### Syntax
 > python frameposter.py \<film number\>
@@ -38,7 +38,7 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll probably remove in the future) and a frame will soon be posted on your Twitter account. 
 ### Troubleshooting
 I haven't implemented a lot of error handling yet, and I'm not sure how well this'll work on other machines. If you get an error and don't know what it means, double check the following:
- - Secrets file
+ - secrets.py
  - movies.toml
  - Dependencies (make sure you have all of them properly installed for Python 3)
  - Python version (make sure you're on Python 3.*
