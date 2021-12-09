@@ -80,10 +80,10 @@ movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 ffmpeg.run(movie)
 ## Post photo to Twitter
 img = api.UploadMediaChunked(("temp.jpg"))
-twitpost = api.PostUpdate("[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]", media=img)
+twitpost = api.PostUpdate("", media=img)
 ### Get tweet ID for recording in database
-tid = twitpost._json["id"]
+twitreply = api.PostUpdate("[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]", in_reply_to_status_id=twitpost._json["id"], auto_populate_reply_metadata=True)
 ## Update DB
-db.insert({'id': twitpost._json["id"], 'film' : film, 'frame': rand})
+db.insert({'id': twitpost._json["id"], 'repid' : twitreply._json["id"], 'film' : film, 'frame': rand})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 os.remove('temp.jpg')
