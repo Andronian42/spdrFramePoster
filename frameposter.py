@@ -79,7 +79,8 @@ movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr
 movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 ffmpeg.run(movie)
 ## Post photo to Twitter
-img = api.UploadMediaChunked(("temp.jpg"))
+img = api.UploadMediaChunked("temp.jpg")
+api.PostMediaMetadata(img, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
 twitpost = api.PostUpdate("", media=img)
 ### Get tweet ID for recording in database
 twitreply = api.PostUpdate("[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]", in_reply_to_status_id=twitpost._json["id"], auto_populate_reply_metadata=True)
