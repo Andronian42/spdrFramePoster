@@ -1,7 +1,6 @@
 """
 ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 2.0
 Code first touched on July 30th, 2019 [https://twitter.com/Andronian42/status/1156018491150876672]
-Code last touched on December 7th, 2021
 I am not responsible for any fires, death, spider-related accidents, etc. that this software may cause.
 I *will* try to help, though. If you have trouble, check out the github page:
 https://github.com/Andronian42/spdrFramePoster
