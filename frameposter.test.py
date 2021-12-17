@@ -51,6 +51,12 @@ while True:
     rand = random.randint(0,filminfo[str(film)]['filmframes']-1)
     if rand not in nopost:
         break
+rand = 69420
+## Calculate frame time
+hours = math.floor((rand/framerate)/3600)
+minutes = math.floor(((rand/framerate)-(hours*3600))/60)
+seconds = math.floor((rand/framerate)-(hours*3600)-(minutes*60))
+time = str(hours) + ":" + str(minutes).zfill(2) + ":" + str(seconds).zfill(2)
 ## Make sure a frame does not currently exist in the folder the program is being run in
 try:
     os.remove('temp.jpg')
@@ -69,3 +75,4 @@ if filminfo[str(film)]['filmhdr'] == True:
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
 movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 ffmpeg.run(movie)
+print("[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
