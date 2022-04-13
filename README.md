@@ -7,6 +7,7 @@ A not-so-dead-simple Python script for posting random video frames to a Twitter 
  - Faster extraction than before!
  - Selecting between multiple videos!
  - Database to keep from posting repeat frames!
+ - [NEW] Frame information in alt text!
 ## WARNING:
 This script comes with no warranty, and no promise of quality. This project is poorly coded, and it'll likely stay that way.
 
@@ -41,7 +42,7 @@ I haven't implemented a lot of error handling yet, and I'm not sure how well thi
  - secrets.py
  - movies.toml
  - Dependencies (make sure you have all of them properly installed for Python 3)
- - Python version (make sure you're on Python 3.*
+ - Python version (make sure you're on Python 3)
  - Twitter account (make sure everything's alright there)
  
 If none of these work or you're just generally pissed about the sorry state of this program, submit a GitHub issue and I'll happily try to get your problem resolved.
