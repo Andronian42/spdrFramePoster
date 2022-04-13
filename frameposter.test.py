@@ -51,7 +51,6 @@ while True:
     rand = random.randint(0,filminfo[str(film)]['filmframes']-1)
     if rand not in nopost:
         break
-rand = 69420
 ## Calculate frame time
 hours = math.floor((rand/framerate)/3600)
 minutes = math.floor(((rand/framerate)-(hours*3600))/60)
@@ -73,6 +72,6 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
-movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+movie = ffmpeg.output(movie, 'temp.png', vframes=1)
 ffmpeg.run(movie)
 print("[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
