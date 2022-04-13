@@ -142,6 +142,7 @@ movies.toml
 
 # Images
 *.jpg
+*.png
 
 #TinyDB Databases
 *.json
