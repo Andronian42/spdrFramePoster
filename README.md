@@ -1,5 +1,5 @@
 # spdrFramePoster
-A not-so-dead-simple Python script for posting random video frames to a Twitter account. Currently used on (and mainly developed for) [@SpidrVrseFrames](twitter.com/spidrVrseFrames).
+A not-so-dead-simple Python script for posting random video frames to social media services. Originally developed for [@SpidrVrseFrames](twitter.com/spidrVrseFrames).
 ## Features:
  - Just enough customization!
  - Support for whatever ffmpeg supports!
