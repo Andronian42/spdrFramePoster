@@ -26,6 +26,7 @@ along with spdrFramePoster.  If not, see <https://www.gnu.org/licenses/>.
 import random
 import json
 import twitter
+import requests
 import ffmpeg
 import os
 import sys
