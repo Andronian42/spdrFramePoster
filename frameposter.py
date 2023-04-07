@@ -36,7 +36,7 @@ from tinydb import TinyDB, Query
 film = int(sys.argv[1:][0])
 ## Initialize database
 db = TinyDB('frinfo.json')
-## Log into the Twitter API
+## Load API secrets
 from secrets import credentials
 ## Get film info
 filminfo = toml.load("movies.toml")
