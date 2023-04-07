@@ -25,7 +25,7 @@ credentials = {
         'access_token_key':'[insert token key here]',
         'access_token_secret':'[insert token secret here]'
     },
-    'mastadon':{
+    'mastodon':{
         'TODO':'TODO'
     }
 }
