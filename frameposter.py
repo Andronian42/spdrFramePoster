@@ -32,6 +32,7 @@ import math
 from fractions import Fraction
 import toml
 from tinydb import TinyDB, Query
+## Check arguments
 if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
