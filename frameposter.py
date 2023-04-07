@@ -36,8 +36,8 @@ from tinydb import TinyDB, Query
 if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
-soc = sys.argv[1:][1].lower
-if soc not in ('tw'):
+soc = sys.argv[1:][1].lower()
+if soc not in ['tw','na']:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Initialize database
 db = TinyDB('frinfo.json')
