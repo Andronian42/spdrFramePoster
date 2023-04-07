@@ -24,5 +24,8 @@ credentials = {
         'consumer_secret':'[insert consumer secret here]',
         'access_token_key':'[insert token key here]',
         'access_token_secret':'[insert token secret here]'
+    },
+    'mastadon':{
+        'TODO':'TODO'
     }
 }
