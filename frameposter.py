@@ -37,7 +37,7 @@ if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
 soc = sys.argv[1:][1].lower()
-if soc not in ['tw','tu']:
+if soc not in ['tw','tu', 'ma', 'file']:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Initialize database
 db = TinyDB('frinfo.json')
@@ -52,6 +52,8 @@ elif soc == 'tu':
     tc = credentials['tumblr']
     import pytumblr
     tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
+elif soc == 'ma':
+    print("todo")
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
@@ -74,6 +76,10 @@ try:
     os.remove('temp.jpg')
 except:
     pass
+try:
+    os.remove('temp.png')
+except:
+    pass
 ## Use FFMPEG to get and save a specific frame
 movie = ffmpeg.input(filminfo[str(film)]['filename'], ss=rand/framerate, vsync=0)
 if filminfo[str(film)]['filmhdr'] == True:
@@ -85,7 +91,10 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
-movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+if soc == 'tw':
+    movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+else:
+    movie = ffmpeg.output(movie, 'temp.png', qscale=0, vframes=1)
 ffmpeg.run(movie)
 ## Post photo
 if soc == 'tw':
@@ -94,9 +103,20 @@ if soc == 'tw':
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
 elif soc == 'tu':
-    post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.jpg', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
-    postid = post['id']
+    post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
+    postid = post['id']'
+elif soc == 'ma':
+    print('todo')
+elif soc == 'file':
+    os.rename('temp.png', rand + '.png')
 ## Update DB
 db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
-os.remove('temp.jpg')
+try:
+    os.remove('temp.jpg')
+except:
+    pass
+try:
+    os.remove('temp.png')
+except:
+    pass
