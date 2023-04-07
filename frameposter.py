@@ -83,7 +83,12 @@ if filminfo[str(film)]['filmhdr'] == True:
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
 movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 ffmpeg.run(movie)
-## Post photo to Twitter
+## Post photo
+if soc == 'tw':
+    img = t1.simple_upload('temp.jpg')
+    t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    post = t2.create_tweet(media_ids=[img.media_id])
+    postid = post.data['id']
 ## Update DB
 db.insert({'id': twitpost._json["id"], 'repid' : 0, 'film' : film, 'frame': rand})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
