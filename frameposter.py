@@ -90,6 +90,6 @@ if soc == 'tw':
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
 ## Update DB
-db.insert({'id': twitpost._json["id"], 'repid' : 0, 'film' : film, 'frame': rand})
+db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 os.remove('temp.jpg')
