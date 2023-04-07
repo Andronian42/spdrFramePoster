@@ -104,7 +104,7 @@ if soc == 'tw':
     postid = post.data['id']
 elif soc == 'tu':
     post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
-    postid = post['id']'
+    postid = post['id']
 elif soc == 'ma':
     print('todo')
 elif soc == 'file':
