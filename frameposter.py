@@ -37,7 +37,7 @@ if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
 soc = sys.argv[1:][1].lower()
-if soc not in ['tw','na']:
+if soc not in ['tw','tu']:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Initialize database
 db = TinyDB('frinfo.json')
@@ -48,6 +48,10 @@ if soc == 'tw':
     import tweepy
     t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
     t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
+elif soc == 'tu':
+    tc = credentials['tumblr']
+    import pytumblr
+    tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
@@ -89,6 +93,9 @@ if soc == 'tw':
     t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
+elif soc == 'tu':
+    post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.jpg', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
+    postid = post['id']
 ## Update DB
 db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
