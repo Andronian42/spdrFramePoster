@@ -37,7 +37,7 @@ film = int(sys.argv[1:][0])
 ## Initialize database
 db = TinyDB('frinfo.json')
 ## Load API secrets
-from secrets import credentials
+from usersecrets import credentials
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
