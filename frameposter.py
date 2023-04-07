@@ -43,10 +43,6 @@ if soc not in ('tw'):
 db = TinyDB('frinfo.json')
 ## Log into any necessary APIs
 from secrets import credentials
-api = twitter.Api(consumer_key=credentials['consumer_key'],
-                consumer_secret=credentials['consumer_secret'],
-                access_token_key=credentials['access_token_key'],
-                access_token_secret=credentials['access_token_secret'])
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
