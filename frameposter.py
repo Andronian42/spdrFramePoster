@@ -25,7 +25,6 @@ along with spdrFramePoster.  If not, see <https://www.gnu.org/licenses/>.
 ## Import all necessary dependencies
 import random
 import json
-import twitter
 import requests
 import ffmpeg
 import os
@@ -39,10 +38,6 @@ film = int(sys.argv[1:][0])
 db = TinyDB('frinfo.json')
 ## Log into the Twitter API
 from secrets import credentials
-api = twitter.Api(consumer_key=credentials['consumer_key'],
-                consumer_secret=credentials['consumer_secret'],
-                access_token_key=credentials['access_token_key'],
-                access_token_secret=credentials['access_token_secret'])
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
@@ -79,10 +74,7 @@ movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr
 movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 ffmpeg.run(movie)
 ## Post photo to Twitter
-img = api.UploadMediaChunked("temp.jpg")
-api.PostMediaMetadata(img, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
-twitpost = api.PostUpdate("", media=img)
 ## Update DB
-db.insert({'id': twitpost._json["id"], 'repid' : 0, 'film' : film, 'frame': rand})
+db.insert({'id': ["id"], 'repid' : 0, 'film' : film, 'frame': rand})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 os.remove('temp.jpg')
