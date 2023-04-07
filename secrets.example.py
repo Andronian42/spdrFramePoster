@@ -18,5 +18,11 @@ credentials = {
         'consumer_secret':'[insert consumer secret here]',
         'access_token_key':'[insert token key here]',
         'access_token_secret':'[insert token secret here]'
+    },
+    'tumblr':{
+        'consumer_key':'[insert consumer key here]',
+        'consumer_secret':'[insert consumer secret here]',
+        'access_token_key':'[insert token key here]',
+        'access_token_secret':'[insert token secret here]'
     }
 }
