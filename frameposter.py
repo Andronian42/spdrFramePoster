@@ -41,7 +41,7 @@ if soc not in ('tw'):
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Initialize database
 db = TinyDB('frinfo.json')
-## Log into the Twitter API
+## Log into any necessary APIs
 from secrets import credentials
 api = twitter.Api(consumer_key=credentials['consumer_key'],
                 consumer_secret=credentials['consumer_secret'],
