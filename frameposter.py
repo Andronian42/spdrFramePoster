@@ -37,8 +37,6 @@ if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
 soc = sys.argv[1:][1].lower()
-if soc not in ['tw','tu', 'ma', 'file']:
-    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Initialize database
 db = TinyDB('frinfo.json')
 ## Log into any necessary APIs
@@ -56,6 +54,10 @@ elif soc == 'ma': ## Mastodon
     mc = credentials['mastodon']
     from mastodon import Mastodon
     mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+elif soc == 'file': ## Straight to file
+    pass
+else:
+    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
