@@ -53,7 +53,9 @@ elif soc == 'tu':
     import pytumblr
     tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
 elif soc == 'ma':
-    print("todo")
+    mc = credentials['mastodon']
+    from mastodon import Mastodon
+    mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
@@ -106,7 +108,9 @@ elif soc == 'tu':
     post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
     postid = post['id']
 elif soc == 'ma':
-    print('todo')
+    img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    post = mclient.status_post('', media_ids=img)
+    postid = post['id']
 elif soc == 'file':
     os.rename('temp.png', str(rand) + '.png')
     postid = None
