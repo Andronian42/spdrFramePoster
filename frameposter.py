@@ -108,7 +108,8 @@ elif soc == 'tu':
 elif soc == 'ma':
     print('todo')
 elif soc == 'file':
-    os.rename('temp.png', rand + '.png')
+    os.rename('temp.png', str(rand) + '.png')
+    postid = None
 ## Update DB
 db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
