@@ -1,0 +1,14 @@
+## This file should be installed with pip before running the attached script.
+## Not all programs here are required to run the script, but go ahead and install them anyway. No reason not to, in my opinion.
+## Install by running:
+## pip install -r requirements.txt
+
+# These are required to run the program at all, currently. Future updates may make some of these optional, but they should still be installed nonetheless for full compatability.
+ffmpeg-python
+toml
+tinydb
+
+# These are only required for specific sites.
+tweepy          # Twitter
+pytumblr        # Tumblr
+Mastodon.py     # Mastodon
