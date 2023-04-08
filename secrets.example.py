@@ -26,6 +26,7 @@ credentials = {
         'access_token_secret':'[insert token secret here]'
     },
     'mastodon':{
-        'TODO':'TODO'
+        'url':'https://mastodon.example',
+        'access_token':'[insert access token here]'
     }
 }
