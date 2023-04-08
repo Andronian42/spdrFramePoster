@@ -68,7 +68,7 @@ for frange in filminfo[str(film)]['filmnopost']:
 ## Get frame number
 while True:
     rand = random.randint(0,filminfo[str(film)]['filmframes']-1)
-    if (rand not in nopost) and db.get(Query().frame == rand) == None:
+    if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
         break
 ## Calculate frame time
 hours = math.floor((rand/framerate)/3600)
