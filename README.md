@@ -52,6 +52,7 @@ Twitter's API situation is currently unstable due to new leadership. These instr
 > python frameposter.py \<film number\> \<service\>
  
 \<film number\> should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
+
 \<service\> should be one of the following based on the service you are posting to:
 - Twitter - `tw`
 - Tumblr - `tu`
