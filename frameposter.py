@@ -43,16 +43,16 @@ if soc not in ['tw','tu', 'ma', 'file']:
 db = TinyDB('frinfo.json')
 ## Log into any necessary APIs
 from secrets import credentials
-if soc == 'tw':
+if soc == 'tw': ## Twitter
     tc = credentials['twitter']
     import tweepy
     t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
     t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
-elif soc == 'tu':
+elif soc == 'tu': ## Tumblr
     tc = credentials['tumblr']
     import pytumblr
     tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
-elif soc == 'ma':
+elif soc == 'ma': ## Mastodon
     mc = credentials['mastodon']
     from mastodon import Mastodon
     mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
@@ -99,19 +99,19 @@ else:
     movie = ffmpeg.output(movie, 'temp.png', qscale=0, vframes=1)
 ffmpeg.run(movie)
 ## Post photo
-if soc == 'tw':
+if soc == 'tw': ## Twitter
     img = t1.simple_upload('temp.jpg')
     t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
-elif soc == 'tu':
+elif soc == 'tu': ## Tumblr
     post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
     postid = post['id']
-elif soc == 'ma':
+elif soc == 'ma': ## Mastodon
     img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = mclient.status_post('', media_ids=img)
     postid = post['id']
-elif soc == 'file':
+elif soc == 'file': ## Straight to file
     os.rename('temp.png', str(rand) + '.png')
     postid = None
 ## Update DB
