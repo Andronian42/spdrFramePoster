@@ -13,8 +13,20 @@
 # }
 #
 credentials = {
-    'consumer_key':'[insert consumer key here]',
-    'consumer_secret':'[insert consumer secret here]',
-    'access_token_key':'[insert token key here]',
-    'access_token_secret':'[insert token secret here]'
+    'twitter':{
+        'consumer_key':'[insert consumer key here]',
+        'consumer_secret':'[insert consumer secret here]',
+        'access_token_key':'[insert token key here]',
+        'access_token_secret':'[insert token secret here]'
+    },
+    'tumblr':{
+        'consumer_key':'[insert consumer key here]',
+        'consumer_secret':'[insert consumer secret here]',
+        'access_token_key':'[insert token key here]',
+        'access_token_secret':'[insert token secret here]'
+    },
+    'mastodon':{
+        'url':'https://mastodon.example',
+        'access_token':'[insert access token here]'
+    }
 }

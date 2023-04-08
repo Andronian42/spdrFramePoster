@@ -1,5 +1,5 @@
 """
-ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 2.0
+ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 3.0
 Code first touched on July 30th, 2019 [https://twitter.com/Andronian42/status/1156018491150876672]
 I am not responsible for any fires, death, spider-related accidents, etc. that this software may cause.
 I *will* try to help, though. If you have trouble, check out the github page:
@@ -25,7 +25,6 @@ along with spdrFramePoster.  If not, see <https://www.gnu.org/licenses/>.
 ## Import all necessary dependencies
 import random
 import json
-import twitter
 import ffmpeg
 import os
 import sys
@@ -33,15 +32,32 @@ import math
 from fractions import Fraction
 import toml
 from tinydb import TinyDB, Query
+## Check arguments
+if len(sys.argv[1:])<2:
+    raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
 film = int(sys.argv[1:][0])
+soc = sys.argv[1:][1].lower()
 ## Initialize database
 db = TinyDB('frinfo.json')
-## Log into the Twitter API
+## Log into any necessary APIs
 from secrets import credentials
-api = twitter.Api(consumer_key=credentials['consumer_key'],
-                consumer_secret=credentials['consumer_secret'],
-                access_token_key=credentials['access_token_key'],
-                access_token_secret=credentials['access_token_secret'])
+if soc == 'tw': ## Twitter
+    tc = credentials['twitter']
+    import tweepy
+    t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
+    t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
+elif soc == 'tu': ## Tumblr
+    tc = credentials['tumblr']
+    import pytumblr
+    tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
+elif soc == 'ma': ## Mastodon
+    mc = credentials['mastodon']
+    from mastodon import Mastodon
+    mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+elif soc == 'file': ## Straight to file
+    pass
+else:
+    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
 filminfo = toml.load("movies.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
@@ -52,7 +68,7 @@ for frange in filminfo[str(film)]['filmnopost']:
 ## Get frame number
 while True:
     rand = random.randint(0,filminfo[str(film)]['filmframes']-1)
-    if (rand not in nopost) and db.get(Query().frame == rand) == None:
+    if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
         break
 ## Calculate frame time
 hours = math.floor((rand/framerate)/3600)
@@ -62,6 +78,10 @@ time = str(hours) + ":" + str(minutes).zfill(2) + ":" + str(seconds).zfill(2)
 ## Make sure a frame does not currently exist in the folder the program is being run in
 try:
     os.remove('temp.jpg')
+except:
+    pass
+try:
+    os.remove('temp.png')
 except:
     pass
 ## Use FFMPEG to get and save a specific frame
@@ -75,13 +95,37 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
-movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+## Save and compress if posting to Twitter
+if soc == 'tw':
+    movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+else:
+    movie = ffmpeg.output(movie, 'temp.png', vframes=1)
 ffmpeg.run(movie)
-## Post photo to Twitter
-img = api.UploadMediaChunked("temp.jpg")
-api.PostMediaMetadata(img, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
-twitpost = api.PostUpdate("", media=img)
+## Post/Save photo
+if soc == 'tw': ## Twitter
+    img = t1.simple_upload('temp.jpg')
+    t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    post = t2.create_tweet(media_ids=[img.media_id])
+    postid = post.data['id']
+elif soc == 'tu': ## Tumblr
+    post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
+    postid = post['id']
+elif soc == 'ma': ## Mastodon
+    img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    post = mclient.status_post('', media_ids=img)
+    postid = post['id']
+elif soc == 'file': ## Straight to file
+    os.rename('temp.png', str(rand) + '.png')
+    postid = None
 ## Update DB
-db.insert({'id': twitpost._json["id"], 'repid' : 0, 'film' : film, 'frame': rand})
+db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
-os.remove('temp.jpg')
+try:
+    os.remove('temp.jpg')
+except:
+    pass
+try:
+    os.remove('temp.png')
+except:
+    pass
+## End script
