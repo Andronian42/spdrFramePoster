@@ -1,5 +1,5 @@
 """
-ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 2.0
+ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 3.0
 Code first touched on July 30th, 2019 [https://twitter.com/Andronian42/status/1156018491150876672]
 I am not responsible for any fires, death, spider-related accidents, etc. that this software may cause.
 I *will* try to help, though. If you have trouble, check out the github page:
@@ -95,12 +95,13 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
+## Save and compress if posting to Twitter
 if soc == 'tw':
     movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 else:
     movie = ffmpeg.output(movie, 'temp.png', qscale=0, vframes=1)
 ffmpeg.run(movie)
-## Post photo
+## Post/Save photo
 if soc == 'tw': ## Twitter
     img = t1.simple_upload('temp.jpg')
     t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
@@ -127,3 +128,4 @@ try:
     os.remove('temp.png')
 except:
     pass
+## End script
