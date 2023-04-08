@@ -99,7 +99,7 @@ movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr
 if soc == 'tw':
     movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 else:
-    movie = ffmpeg.output(movie, 'temp.png', qscale=0, vframes=1)
+    movie = ffmpeg.output(movie, 'temp.png', vframes=1)
 ffmpeg.run(movie)
 ## Post/Save photo
 if soc == 'tw': ## Twitter
