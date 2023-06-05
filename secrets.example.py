@@ -5,6 +5,7 @@
 # If you're currently modifying secrets.example.py, you'll want to exit your editor, make a new copy of this file, and rename it to just secrets.py before editing it. 
 # DO NOT SHARE THE INFO YOU ENTER HERE WITH ANYBODY
 # DO NOT PUSH YOUR EDITED secrets.py TO THE REPOSITORY! secrets.py IS IN gitignore FOR A REASON!
+#
 # Example (NOT REAL VALUES. DO NOT USE THESE):
 #
 # credentials = {
@@ -20,8 +21,9 @@
 #    }
 # }
 #
+
 credentials = {
-    'twitter':{                                             # 
+    'twitter':{
         'consumer_key':'[insert consumer key here]',
         'consumer_secret':'[insert consumer secret here]',
         'access_token_key':'[insert token key here]',
@@ -36,5 +38,9 @@ credentials = {
     'mastodon':{
         'url':'https://mastodon.example',
         'access_token':'[insert access token here]'
+    }
+    'cohost':{
+        'username':'frameposter'
+        'password':'correcthorsebatterystaple'
     }
 }
