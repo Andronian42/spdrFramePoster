@@ -54,6 +54,11 @@ elif soc == 'ma': ## Mastodon
     mc = credentials['mastodon']
     from mastodon import Mastodon
     mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+elif soc == 'co': ## Cohost
+    cc = credentials['cohost']
+    from cohost.models.user import User as CUser
+    ccuser = CUser.login(cc['username'], cc['password'])
+    cclient = ccuser.getProject(cc['handle'])
 elif soc == 'file': ## Straight to file
     pass
 else:
@@ -114,6 +119,11 @@ elif soc == 'ma': ## Mastodon
     img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = mclient.status_post('', media_ids=img)
     postid = post['id']
+elif soc == 'co': ## Cohost
+    from cohost.models.block import AttachmentBlock
+    img = [AttachmentBlock('temp.png', alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")]
+    post = cclient.post('', img, tags=['Spider-Man', 'Spider-Verse'])
+    postid = post.postId
 elif soc == 'file': ## Straight to file
     os.rename('temp.png', str(rand) + '.png')
     postid = None
