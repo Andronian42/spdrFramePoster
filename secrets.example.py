@@ -38,10 +38,10 @@ credentials = {
     'mastodon':{
         'url':'https://mastodon.example',
         'access_token':'[insert access token here]'
-    }
+    },
     'cohost':{
-        'username':'frameposter@example.com'
-        'password':'correcthorsebatterystaple'
+        'username':'frameposter@example.com',
+        'password':'correcthorsebatterystaple',
         'handle':'FramePoster'
     }
 }
