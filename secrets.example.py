@@ -40,7 +40,8 @@ credentials = {
         'access_token':'[insert access token here]'
     }
     'cohost':{
-        'username':'frameposter'
+        'username':'frameposter@example.com'
         'password':'correcthorsebatterystaple'
+        'handle':'FramePoster'
     }
 }
