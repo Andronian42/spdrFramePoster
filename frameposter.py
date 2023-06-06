@@ -117,7 +117,7 @@ elif soc == 'tu': ## Tumblr
     postid = post['id']
 elif soc == 'ma': ## Mastodon
     img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
-    post = mclient.status_post('', media_ids=img)
+    post = mclient.status_post('', media_ids=img, visibility='public')
     postid = post['id']
 elif soc == 'co': ## Cohost
     from cohost.models.block import AttachmentBlock
