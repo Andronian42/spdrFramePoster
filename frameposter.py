@@ -113,7 +113,7 @@ if soc == 'tw': ## Twitter
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
 elif soc == 'tu': ## Tumblr
-    post = tclient.create_photo('spidrvrseframes', state="published", tags=["Spider-Verse", "Spider-Man"], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
+    post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['filmtags'], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
     postid = post['id']
 elif soc == 'ma': ## Mastodon
     img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
@@ -122,7 +122,7 @@ elif soc == 'ma': ## Mastodon
 elif soc == 'co': ## Cohost
     from cohost.models.block import AttachmentBlock
     img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")]
-    post = cclient.post('', img, tags=['Spider-Man', 'Spider-Verse'])
+    post = cclient.post('', img, tags=filminfo[str(film)]['filmtags'])
     postid = post.postId
 elif soc == 'file': ## Straight to file
     os.rename('temp.png', str(rand) + '.png')
