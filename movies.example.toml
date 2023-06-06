@@ -11,8 +11,11 @@
 # filmcroptb - The total number of pixels to crop from the top and bottom combined (for letterboxed videos)
 # filmcroplr - The total number of pixels to crop from the left and right combined (for letterboxed videos)
 # filmnopost - Ranges of frames where the script should not post from. Should be a list of nested lists consisting of [start, end] frames in range of frames that should not be posted, inclusive.
+# filmtags - List of tags to post the film with on microblog sites such as Tumblr and Cohost. Should be safe to leave blank if you just leave the [] behind.
 # 
 # The following is an example of a toml file that might be used on my own bot:
+#
+#
 #
 # [0]
 # filename = 'movie0.mkv'
@@ -23,8 +26,9 @@
 # filmcroptb = 552
 # filmcroplr = 0
 # filmnopost = [[1,1538], [1593,1638], [1710,1757],[1789,1829],[151630,151693],[156011,166125],[167856,168072]]
+# filmtags = ['Spider-Man', 'Spider-Verse', 'Spider-Man: Into the Spider-Verse', 'Into the Spider-Verse']
 # [1]
-# filename = 'movie1.mkv'
+# filename = 'nbc.mp4'
 # filmframes = 146856
 # filmname = "NBC Mystery Movie"
 # framerate = '24000/1001'
@@ -32,6 +36,7 @@
 # filmcroptb = 0
 # filmcroplr = 0
 # filmnopost = []
+# filmtags = []
 #
 # NOTE: When invoking frameposter.py, you'll be using the value in the brackets as your argument to select a film.
 [0]
