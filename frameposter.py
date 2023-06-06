@@ -101,10 +101,10 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
 movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
 ## Save and compress if posting to Twitter
-if soc == 'tw':
+if soc == 'tw' or soc == 'co':
     movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
 else:
-    movie = ffmpeg.output(movie, 'temp.png', vframes=1)
+    movie = ffmpeg.output(movie, 'temp.png', pred='mixed', vframes=1)
 ffmpeg.run(movie)
 ## Post/Save photo
 if soc == 'tw': ## Twitter
@@ -121,7 +121,7 @@ elif soc == 'ma': ## Mastodon
     postid = post['id']
 elif soc == 'co': ## Cohost
     from cohost.models.block import AttachmentBlock
-    img = [AttachmentBlock('temp.png', alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")]
+    img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")]
     post = cclient.post('', img, tags=['Spider-Man', 'Spider-Verse'])
     postid = post.postId
 elif soc == 'file': ## Straight to file
