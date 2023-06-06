@@ -8,7 +8,7 @@ A not-so-dead-simple Python script for posting random video frames to social med
  - Selecting between multiple videos!
  - Database to keep from posting repeat frames!
  - Frame information in alt/descriptive text format for some services.
- - [NEW] Support for Twitter (Free API compatability not currently guaranteed), Tumblr, and Mastodon
+ - [NEW] Support for Twitter, Tumblr, Mastodon, and Cohost
 ## WARNING:
 This script comes with no warranty, and no promise of quality. This project is poorly coded, and it'll likely stay that way.
 
@@ -48,15 +48,19 @@ Twitter's API situation is currently unstable due to new leadership. These instr
 3. Go to your account settings, then click "Developer" on the settings sidebar.
 4. Register an application with `write:media` and `write:statuses` scopes
 5. Copy `Your access token` into secrets.py
+#### Cohost
+1. Enter your Cohost `username` (email) and `password` into secrets.py
+2. Enter the handle of the page you want to post to as `handle` in secrets.py
 ### Syntax
 > python frameposter.py \<film number\> \<service\>
  
-\<film number\> should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
+`\<film number\>` should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
 
-\<service\> should be one of the following based on the service you are posting to:
+`\<service\>` should be one of the following based on the service you are posting to:
 - Twitter - `tw`
 - Tumblr - `tu`
 - Mastodon - `ma`
+- Cohost - `co`
 - File (keep the frame in the script folder) - `file`
 ### Result
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll figure out how to remove in the future) and a frame will soon be posted on the account of your choice. 
