@@ -64,15 +64,15 @@ elif soc == 'file': ## Straight to file
 else:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
-filminfo = toml.load("movies.toml")
+filminfo = toml.load("videos.toml")
 framerate = float(Fraction(filminfo[str(film)]['framerate']))
 ## Make sure nopost is set up
 nopost = []
-for frange in filminfo[str(film)]['filmnopost']:
+for frange in filminfo[str(film)]['nopost']:
     nopost.extend(range(frange[0]-1,frange[1]))
 ## Get frame number
 while True:
-    rand = random.randint(0,filminfo[str(film)]['filmframes']-1)
+    rand = random.randint(0,filminfo[str(film)]['frames']-1)
     if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
         break
 ## Calculate frame time
@@ -91,7 +91,7 @@ except:
     pass
 ## Use FFMPEG to get and save a specific frame
 movie = ffmpeg.input(filminfo[str(film)]['filename'], ss=rand/framerate, vsync=0)
-if filminfo[str(film)]['filmhdr'] == True:
+if filminfo[str(film)]['hdr'] == True:
     movie = ffmpeg.filter(movie, 'zscale', tin='smpte2084',min='bt2020nc',pin='bt2020',rin='tv',t='smpte2084',m='bt2020nc',p='bt2020',r='tv')
     movie = ffmpeg.filter(movie, 'zscale', t='linear',npl=60)
     movie = ffmpeg.filter(movie, 'format', 'gbrpf32le')
@@ -99,7 +99,7 @@ if filminfo[str(film)]['filmhdr'] == True:
     movie = ffmpeg.filter(movie, 'tonemap', 'hable', desat=0)
     movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
     movie = ffmpeg.filter(movie, 'format', 'yuv420p')
-movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['filmcroplr']), 'in_h-'+str(filminfo[str(film)]['filmcroptb']))
+movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['croplr']), 'in_h-'+str(filminfo[str(film)]['croptb']))
 ## Save and compress if posting to Twitter
 if soc == 'tw' or soc == 'co':
     movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
@@ -109,20 +109,20 @@ ffmpeg.run(movie)
 ## Post/Save photo
 if soc == 'tw': ## Twitter
     img = t1.simple_upload('temp.jpg')
-    t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = t2.create_tweet(media_ids=[img.media_id])
     postid = post.data['id']
 elif soc == 'tu': ## Tumblr
-    post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['filmtags'], data='temp.png', caption=filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand))
+    post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
     postid = post['id']
 elif soc == 'ma': ## Mastodon
-    img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")
+    img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
     post = mclient.status_post('', media_ids=img, visibility='public')
     postid = post['id']
 elif soc == 'co': ## Cohost
     from cohost.models.block import AttachmentBlock
-    img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['filmname'] + ", " + time + ", Frame " + str(rand) + "]")]
-    post = cclient.post('', img, tags=filminfo[str(film)]['filmtags'])
+    img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")]
+    post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
     postid = post.postId
 elif soc == 'file': ## Straight to file
     os.rename('temp.png', str(rand) + '.png')

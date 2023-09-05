@@ -1,0 +1,51 @@
+# This is where you'll have to manually insert information about the videos you'll be extracting frames from.
+# I know, it's tedious, but ffprobe is too slow for my needs. If I find something faster, I'll replace this with that. I swear.
+# Fill in information about the movies you'll be posting, then rename this file to movies.toml
+# DO NOT PUSH THE FINISHED FILE TO THE REPO! It's not as much a security risk as with secrets.py, but it would still suck.
+# I'll go over every individual veriable here:
+# filename - Movie filename
+# videoname - Name of video (for text and alt text)
+# frames - Number of frames in the file
+# framerate - Framerate, provided as a fraction
+# hdr - Whether the video uses HDR or not
+# croptb - The total number of pixels to crop from the top and bottom combined (for letterboxed videos)
+# croplr - The total number of pixels to crop from the left and right combined (for letterboxed videos)
+# nopost - Ranges of frames where the script should not post from. Should be a list of nested lists consisting of [start, end] frames in range of frames that should not be posted, inclusive.
+# tags - List of tags to post the film with on microblog sites such as Tumblr and Cohost. Should be safe to leave blank if you just leave the [] behind.
+# 
+# The following is an example of a toml file that might be used on my own bot:
+#
+#
+#
+# [0]
+# filename = 'movie0.mkv'
+# videoname = "Into The Spider-Verse"
+# frames = 168072
+# framerate = '24000/1001'
+# hdr = true
+# croptb = 552
+# croplr = 0
+# nopost = [[1,1538], [1593,1638], [1710,1757],[1789,1829],[151630,151693],[156011,166125],[167856,168072]]
+# tags = ['Spider-Man', 'Spider-Verse', 'Spider-Man: Into the Spider-Verse', 'Into the Spider-Verse']
+# [1]
+# filename = 'nbc.mp4'
+# videoname = "NBC Mystery Movie"
+# frames = 146856
+# framerate = '24000/1001'
+# hdr = false
+# croptb = 0
+# croplr = 0
+# nopost = []
+# tags = []
+#
+# NOTE: When invoking frameposter.py, you'll be using the value in the brackets as your argument to select a film.
+[0]
+filename = ''
+videoname = ""
+frames = 42
+filmname = ""
+framerate = '24000/1001'
+hdr = false
+croptb = 0
+croplr = 0
+nopost = []
