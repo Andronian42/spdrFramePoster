@@ -6,6 +6,7 @@
 # These are required to run the program at all, currently. Future updates may make some of these optional, but they should still be installed nonetheless for full compatability.
 ffmpeg-python
 toml
+tomlkit
 tinydb
 
 # These are required to run the videos setup script. If you're planning on using that script, make sure to install these.
