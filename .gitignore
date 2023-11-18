@@ -132,8 +132,9 @@ dmypy.json
 secrets.py
 *secrets.py
 
-# Movies
+# Videos
 movies.toml
+videos.toml
 
 # Video files
 *.mkv
