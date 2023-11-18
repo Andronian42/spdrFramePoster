@@ -8,6 +8,9 @@ ffmpeg-python
 toml
 tinydb
 
+# These are required to run the videos setup script. If you're planning on using that script, make sure to install these.
+ffprobe-python
+
 # These are only required for specific sites.
 tweepy          # Twitter
 pytumblr        # Tumblr
