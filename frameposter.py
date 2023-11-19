@@ -65,7 +65,10 @@ else:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
 filminfo = toml.load("videos.toml")
-framerate = float(Fraction(filminfo[str(film)]['framerate']))
+if isinstance(filminfo[str(film)]['framerate'], str):
+    framerate = float(Fraction(filminfo[str(film)]['framerate']))
+else:
+    framerate = float(filminfo[str(film)]['framerate'])
 ## Make sure nopost is set up
 nopost = []
 for frange in filminfo[str(film)]['nopost']:
