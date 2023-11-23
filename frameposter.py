@@ -32,15 +32,32 @@ import math
 from fractions import Fraction
 from tomlkit.toml_file import TOMLFile
 from tinydb import TinyDB, Query
-## Check arguments
+## Check arguments/options
 if len(sys.argv[1:])==0:
     raise SystemExit("frameposter.py - the frame posting script part of spdrFramePoster, made by Androw with <3\n\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)> - One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service> - Service being posted to. See readme for a list of services.\n")
-elif len(sys.argv[1:])<2:
-    raise ValueError('Needs at least two arguments')
-## Pick film
-films = sys.argv[1:][0].split(',')
+else:
+    arguments = []
+    options = {}
+    del sys.argv[:1]
+    while len(sys.argv)>0:
+        if not sys.argv[0].startswith("-"):
+            arguments.append(sys.argv.pop(0))
+        elif sys.argv[0].startswith("--"):
+            options[sys.argv.pop(0)[2:]] = True
+        else:
+            if sys.argv[0][1:] in ['?','v']:
+                options[sys.argv.pop(0)[1:]] = True
+            else:
+                options[sys.argv.pop(0)[1:]] = sys.argv.pop(1)
+    if ('help' in options and options['help'] == True) or ('?' in options and options['?'] == True):
+        raise SystemExit("\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)>    One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service>     Service being posted to. See readme for a list of services.\n\nOptions:\n --help  -?  List arguments and options\n")
+    elif len(arguments)<2:
+        raise ValueError('Needs at least two arguments')
+    elif len(arguments)>2:
+        raise ValueError('Only accepts two arguments')
+films = arguments[0].split(',')
 film = random.choice(films)
-soc = sys.argv[1:][1].lower()
+soc = arguments[1].lower()
 ## Initialize database
 db = TinyDB('frinfo.json')
 ## Log into any necessary APIs
