@@ -69,30 +69,6 @@ else:
 soc = arguments[1].lower()
 ## Initialize database
 db = TinyDB('frinfo.json')
-## Log into any necessary APIs
-from secrets import credentials
-if soc == 'tw': ## Twitter
-    tc = credentials['twitter']
-    import tweepy
-    t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
-    t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
-elif soc == 'tu': ## Tumblr
-    tc = credentials['tumblr']
-    import pytumblr
-    tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
-elif soc == 'ma': ## Mastodon
-    mc = credentials['mastodon']
-    from mastodon import Mastodon
-    mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
-elif soc == 'co': ## Cohost
-    cc = credentials['cohost']
-    from cohost.models.user import User as CUser
-    ccuser = CUser.login(cc['username'], cc['password'])
-    cclient = ccuser.getProject(cc['handle'])
-elif soc == 'file': ## Straight to file
-    pass
-else:
-    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
 filminfo = TOMLFile('videos.toml').read()
 if isinstance(filminfo[str(film)]['framerate'], str):
@@ -142,6 +118,31 @@ if soc == 'tw' or soc == 'co':
 else:
     movie = ffmpeg.output(movie, 'temp.png', pred='mixed', vframes=1)
 ffmpeg.run(movie)
+## Log into any necessary APIs
+if soc != 'file':
+    from secrets import credentials
+if soc == 'tw': ## Twitter
+    tc = credentials['twitter']
+    import tweepy
+    t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
+    t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
+elif soc == 'tu': ## Tumblr
+    tc = credentials['tumblr']
+    import pytumblr
+    tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
+elif soc == 'ma': ## Mastodon
+    mc = credentials['mastodon']
+    from mastodon import Mastodon
+    mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+elif soc == 'co': ## Cohost
+    cc = credentials['cohost']
+    from cohost.models.user import User as CUser
+    ccuser = CUser.login(cc['username'], cc['password'])
+    cclient = ccuser.getProject(cc['handle'])
+elif soc == 'file': ## Straight to file
+    pass
+else:
+    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Post/Save photo
 if soc == 'tw': ## Twitter
     img = t1.simple_upload('temp.jpg')
