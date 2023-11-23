@@ -35,7 +35,8 @@ from tinydb import TinyDB, Query
 ## Check arguments
 if len(sys.argv[1:])<2:
     raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
-film = int(sys.argv[1:][0])
+films = sys.argv[1:][0].split(',')
+film = random.choice(films)
 soc = sys.argv[1:][1].lower()
 ## Initialize database
 db = TinyDB('frinfo.json')
@@ -128,10 +129,12 @@ elif soc == 'co': ## Cohost
     post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
     postid = post.postId
 elif soc == 'file': ## Straight to file
-    os.rename('temp.png', str(rand) + '.png')
+    os.rename('temp.png', str(film)+'-'+str(rand) + '.png')
+    print("Generated: " + str(film)+'-'+str(rand) + '.png')
     postid = None
 ## Update DB
-db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
+if postid != None:
+    db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 try:
     os.remove('temp.jpg')
