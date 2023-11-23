@@ -1,14 +1,15 @@
 # spdrFramePoster
 A not-so-dead-simple Python script for posting random video frames to social media services. Originally developed for [@SpidrVrseFrames](twitter.com/spidrVrseFrames).
 ## Features:
- - Just enough customization!
- - Support for whatever ffmpeg supports!
- - HDR tonemapping support for some reason!
- - Faster extraction than before!
- - Selecting between multiple videos!
- - Database to keep from posting repeat frames!
- - Frame information in alt/descriptive text format for some services.
- - [NEW] Support for Twitter, Tumblr, Mastodon, and Cohost
+ - Uses FFMPEG, supports what FFMPEG supports
+ - HDR tonemappin
+ - Fast and accurate extraction
+ - Support for multiple videos and services with command arguments
+ - Database to prevent repeat postings
+ - Support for Twitter, Tumblr, Mastodon, and Cohost
+ - Tag support on Tumblr and Cohost
+ - Alt text support on Twitter, Mastodon, and Cohost\
+ - Video auto-configuration script
 ## WARNING:
 This script comes with no warranty, and no promise of quality. This project is poorly coded, and it'll likely stay that way.
 
@@ -16,19 +17,32 @@ This is my first public repository, and also isn't necessarily a normal script r
 
 I am not responsible for DMCA takedowns, account suspensions, accidental file deletions, spider-related accidents, etc. caused by this script or its usage.
 
-This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would like to be informed of other accounts that use this script. Because that would be cool.
+This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would appreciate being informed of other accounts that use this script. Because that would be cool.
 ## Usage
+### Syntax
+> python frameposter.py \<film number\> \<service\>
+ 
+`<film number>` should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
+
+`<service>` should be one of the following based on the service you are posting to:
+- Twitter - `tw`
+- Tumblr - `tu`
+- Mastodon - `ma`
+- Cohost - `co`
+- File (keep the frame in the script folder) - `file`
 ### Dependencies
-- Python 3\.* with pip
+- Python 3\.* with pip (newest version recommended, tested 3.9-3.12)
 - FFMPEG built with libzimg (for tonemapping; if your source videos aren't HDR, libzimg shouldn't be a requirement)
 - API access for any site you want to post to
+#### video.toml config
+- mediainfo ([https://mediaarea.net/en/MediaInfo](https://mediaarea.net/en/MediaInfo))
 ### Setup
 1. Clone the repository to any working directory (don't be that weirdo who runs their scripts from their downloads folder)
 2. Install remaining dependencies by running `pip install -r requirements.txt` in said working directory
 3. Add video files to repository folder
-4. Rename `movies.example.toml` to `movies.toml` and add all necessary information regarding video files (read the documentation in that file for more information)
+4. Run `videos.setup.py` and follow the instructions to add a video configuration, or rename `secrets.example.py` to `secrets.py` and populate it with all relevant metadata.
 5. Rename `secrets.example.py` to `secrets.py` and populate it with all relevant API credentials (platform-specific instructions below). You can safely ignore credentials for any services you won't be using.
-5. Run the main frameposter.py script manually or with your favorite scheduling application, e.g. cron, using the syntax below
+6. Run the main frameposter.py script manually or with your favorite scheduling application, e.g. cron, using the syntax below
 ### APIs
 #### Twitter
 Twitter's API situation is currently unstable due to new leadership. These instructions are accurate as of when I'm writing them, but there's a fair chance you'll be on your own for this one.
@@ -51,17 +65,6 @@ Twitter's API situation is currently unstable due to new leadership. These instr
 #### Cohost
 1. Enter your Cohost `username` (email) and `password` into secrets.py
 2. Enter the handle of the page you want to post to as `handle` in secrets.py
-### Syntax
-> python frameposter.py \<film number\> \<service\>
- 
-`<film number>` should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
-
-`<service>` should be one of the following based on the service you are posting to:
-- Twitter - `tw`
-- Tumblr - `tu`
-- Mastodon - `ma`
-- Cohost - `co`
-- File (keep the frame in the script folder) - `file`
 ### Result
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll figure out how to remove in the future) and a frame will soon be posted on the account of your choice. 
 ### Troubleshooting
