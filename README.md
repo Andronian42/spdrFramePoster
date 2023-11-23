@@ -29,7 +29,7 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 - Tumblr - `tu`
 - Mastodon - `ma`
 - Cohost - `co`
-- File (keep the frame in the script folder) - `file`
+- File (generate the frame in the script folder) - `file`
 ### Dependencies
 - Python 3\.* with pip (newest version recommended, tested 3.9-3.12)
 - FFMPEG built with libzimg (for tonemapping; if your source videos aren't HDR, libzimg shouldn't be a requirement)
