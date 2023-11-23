@@ -30,7 +30,7 @@ import os
 import sys
 import math
 from fractions import Fraction
-import toml
+from tomlkit.toml_file import TOMLFile
 from tinydb import TinyDB, Query
 ## Check arguments
 if len(sys.argv[1:])<2:
@@ -65,7 +65,7 @@ elif soc == 'file': ## Straight to file
 else:
     raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
 ## Get film info
-filminfo = toml.load("videos.toml")
+filminfo = TOMLFile('videos.toml').read()
 if isinstance(filminfo[str(film)]['framerate'], str):
     framerate = float(Fraction(filminfo[str(film)]['framerate']))
 else:
