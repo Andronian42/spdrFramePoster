@@ -3,15 +3,15 @@
 # I'd recommend editing this with videos.setup.py, but you may edit this file directly if necessary (e.g. need to rename a file in the directory)
 
 # Quick glossary of every variable here:
-# filename - Movie filename
+# filename - Video filename
 # videoname - Name of video (for text and alt text)
-# frames - Number of frames in the file
-# framerate - Framerate, provided as a number or a fraction
+# frames - Number of frames in the video
+# framerate - Framerate, provided as a number or a fraction (fraction is more accurate, but any possible discrepancies wwould only happen for extremely long videos)
 # hdr - Whether the video uses HDR or not
 # croptb - The total number of pixels to crop from the top and bottom combined (for letterboxed videos)
-# croplr - The total number of pixels to crop from the left and right combined (for letterboxed videos)
+# croplr - The total number of pixels to crop from the left and right combined (for pillarboxed videos)
 # nopost - Ranges of frames where the script should not post from. Should be a list of nested lists consisting of [start, end] frames in range of frames that should not be posted, inclusive.
-# tags - List of tags to post the film with on microblog sites such as Tumblr and Cohost. Should be safe to leave blank if you just leave the [] behind.
+# tags - List of tags to post the video with on microblog sites such as Tumblr and Cohost. Should be safe to leave blank if you just leave the [] behind.
 # 
 # The following is an example of a toml file that might be used on my own bot:
 #
@@ -43,9 +43,9 @@
 filename = ''
 videoname = ""
 frames = 42
-filmname = ""
 framerate = '24000/1001'
 hdr = false
 croptb = 0
 croplr = 0
 nopost = []
+tags = []
