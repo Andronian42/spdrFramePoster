@@ -56,7 +56,16 @@ else:
     elif len(arguments)>2:
         raise ValueError('Only accepts two arguments')
 films = arguments[0].split(',')
-film = random.choice(films)
+if 'w' in options:
+    weight = options['w'].split(',')
+    for value in range(len(weight)):
+        weight[value] = float(weight[value])
+    if len(weight) == len(films):
+        film = random.choices(films, weight)[0]
+    else:
+        raise ValueError('Must provide the same number of weights as videos')
+else:
+    film = random.choice(films)
 soc = arguments[1].lower()
 ## Initialize database
 db = TinyDB('frinfo.json')
