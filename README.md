@@ -20,11 +20,11 @@ I am not responsible for DMCA takedowns, account suspensions, accidental file de
 This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would appreciate being informed of other accounts that use this script. Because that would be cool.
 ## Usage
 ### Syntax
-> python frameposter.py \<film number\> \<service\>
+> python frameposter.py \<film number(s)\> \<service\>
  
-`<film number>` should be the number corresponding to one of the films you added to movies.toml (whatever number you put in the brackets)
+`<video(s)>` - One or more videos to post. Must first be configured in the `movies.toml` config file. Every video has a number in `movies.toml`; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces). 
 
-`<service>` should be one of the following based on the service you are posting to:
+`<service>` - Service being posted to. Should be one of the following:
 - Twitter - `tw`
 - Tumblr - `tu`
 - Mastodon - `ma`

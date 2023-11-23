@@ -33,8 +33,10 @@ from fractions import Fraction
 from tomlkit.toml_file import TOMLFile
 from tinydb import TinyDB, Query
 ## Check arguments
-if len(sys.argv[1:])<2:
-    raise ValueError('Please make sure you have given a film and a service as arguments. For more information, refer to the readme.')
+if len(sys.argv[1:])==0:
+    raise SystemExit("frameposter.py - the frame posting script part of spdrFramePoster, made by Androw with <3\n\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)> - One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service> - Service being posted to. See readme for a list of services.\n")
+elif len(sys.argv[1:])<2:
+    raise ValueError('Needs at least two arguments')
 films = sys.argv[1:][0].split(',')
 film = random.choice(films)
 soc = sys.argv[1:][1].lower()
