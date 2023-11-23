@@ -50,7 +50,7 @@ else:
             else:
                 options[sys.argv.pop(0)[1:]] = sys.argv.pop(1)
     if ('help' in options and options['help'] == True) or ('?' in options and options['?'] == True):
-        raise SystemExit("\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)>    One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service>     Service being posted to. See readme for a list of services.\n\nOptions:\n --help  -?  List arguments and options\n")
+        raise SystemExit("\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)>    One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service>     Service being posted to. See readme for a list of services.\n\nOptions:\n --help   -?         List arguments and options\n -f <frame number>   Specify exact frame number\n -w <weights>        Comma separated list of weights, if you're picking from multiple videos and want to weight the randomization (e.g. weight of 80,20 means 80% chance of first option and 20% chance of second option)\n")
     elif len(arguments)<2:
         raise ValueError('Needs at least two arguments')
     elif len(arguments)>2:
@@ -104,10 +104,13 @@ nopost = []
 for frange in filminfo[str(film)]['nopost']:
     nopost.extend(range(frange[0]-1,frange[1]))
 ## Get frame number
-while True:
-    rand = random.randint(0,filminfo[str(film)]['frames']-1)
-    if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
-        break
+if 'f' in options:
+    rand = int(options['f'])
+else:
+    while True:
+        rand = random.randint(0,filminfo[str(film)]['frames']-1)
+        if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
+            break
 ## Calculate frame time
 hours = math.floor((rand/framerate)/3600)
 minutes = math.floor(((rand/framerate)-(hours*3600))/60)
