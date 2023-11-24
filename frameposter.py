@@ -86,7 +86,11 @@ if 'f' in options:
 else:
     while True:
         rand = random.randint(0,filminfo[str(film)]['frames']-1)
-        if (rand not in nopost) and db.get((Query().frame == rand) & (Query().platform == soc)) == None:
+        brk = True
+        for plat in soc:
+            if (rand in nopost) or db.get((Query().frame == rand) & (Query().film == film) & (Query().platform == plat)) != None:
+                brk = False
+        if brk == True:
             break
 ## Calculate frame time
 hours = math.floor((rand/framerate)/3600)
@@ -164,10 +168,9 @@ for serv in soc:
         postid = None
     else:
         raise ValueError(f'The listed service "{serv}" is invalid. Options are as follows: tw,tu,ma,co,file')
-## Update DB
-if not (postid == None or ('nodb' in options and options['nodb'] == True)):
-    db.insert({'repid' : 0, 'film' : film, 'frame': rand,})
-else:
+    if not (postid == None or ('nodb' in options and options['nodb'] == True)):
+        db.insert({'id': postid, 'film' : film, 'frame': rand, 'platform':soc})
+if ('nodb' in options and options['nodb'] == True) and soc != ['file']:
     print("Database has not been modified")
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 try:
