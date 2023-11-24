@@ -1,3 +1,31 @@
+"""
+ANDROW presents: spdrFramePoster (aka Spider-Verse Bot)
+Code first touched on July 30th, 2019 [https://twitter.com/Andronian42/status/1156018491150876672]
+I am not responsible for any fires, death, spider-related accidents, etc. that this software may cause.
+I *will* try to help, though. If you have trouble, check out the github page:
+https://github.com/Andronian42/spdrFramePoster
+"""
+
+version = ["Andronian42", "spdrFramePoster", "videos.setup.py", "v4.0", "November 24th 2023"]
+
+"""
+This script is part of spdrFramePoster.
+
+spdrFramePoster is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+spdrFramePoster is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with spdrFramePoster.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+
 import sys
 import os
 try:
