@@ -160,7 +160,7 @@ for serv in soc:
         postid = post.postId
     elif serv == 'file': ## Straight to file
         shutil.copyfile('temp.png', str(film)+'-'+str(rand) + '.png')
-        print("Generated: " + str(film)+'-'+str(rand) + '.png')
+        print("Generated: {0}\n[{1}]".format(str(film)+'-'+str(rand)+'.png',filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand)))
         postid = None
     else:
         raise ValueError(f'The listed service "{serv}" is invalid. Options are as follows: tw,tu,ma,co,file')
