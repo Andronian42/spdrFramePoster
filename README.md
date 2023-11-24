@@ -2,7 +2,7 @@
 A not-so-dead-simple Python script for posting random video frames to social media services. Originally developed for [@SpidrVrseFrames](twitter.com/spidrVrseFrames).
 ## Features:
  - Uses FFMPEG, supports what FFMPEG supports
- - HDR tonemappin
+ - HDR tonemapping
  - Fast and accurate extraction
  - Support for multiple videos and services with command arguments
  - Database to prevent repeat postings
