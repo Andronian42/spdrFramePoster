@@ -28,6 +28,7 @@ import json
 import ffmpeg
 import os
 import sys
+import shutil
 import math
 from fractions import Fraction
 from tomlkit.toml_file import TOMLFile
@@ -66,7 +67,7 @@ if 'w' in options:
         raise ValueError('Must provide the same number of weights as videos')
 else:
     film = random.choice(films)
-soc = arguments[1].lower()
+soc = arguments[1].lower().split(',')
 ## Initialize database
 db = TinyDB('frinfo.json')
 ## Get film info
@@ -102,72 +103,70 @@ try:
 except:
     pass
 ## Use FFMPEG to get and save a specific frame
-movie = ffmpeg.input(filminfo[str(film)]['filename'], ss=rand/framerate, vsync=0)
-if filminfo[str(film)]['hdr'] == True:
-    movie = ffmpeg.filter(movie, 'zscale', tin='smpte2084',min='bt2020nc',pin='bt2020',rin='tv',t='smpte2084',m='bt2020nc',p='bt2020',r='tv')
-    movie = ffmpeg.filter(movie, 'zscale', t='linear',npl=60)
-    movie = ffmpeg.filter(movie, 'format', 'gbrpf32le')
-    movie = ffmpeg.filter(movie, 'zscale', t='linear',p='bt709')
-    movie = ffmpeg.filter(movie, 'tonemap', 'hable', desat=0)
-    movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
-    movie = ffmpeg.filter(movie, 'format', 'yuv420p')
-movie = ffmpeg.filter(movie, 'crop', 'in_w-'+str(filminfo[str(film)]['croplr']), 'in_h-'+str(filminfo[str(film)]['croptb']))
-## Save and compress if posting to Twitter
-if soc == 'tw' or soc == 'co':
-    movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
-else:
-    movie = ffmpeg.output(movie, 'temp.png', pred='mixed', vframes=1)
-ffmpeg.run(movie)
-## Log into any necessary APIs
-if soc != 'file':
+def render(file, rss, rhdr, crop, out):
+    movie = ffmpeg.input(file, ss=rss, vsync=0)
+    if rhdr == True:
+        movie = ffmpeg.filter(movie, 'zscale', tin='smpte2084',min='bt2020nc',pin='bt2020',rin='tv',t='smpte2084',m='bt2020nc',p='bt2020',r='tv')
+        movie = ffmpeg.filter(movie, 'zscale', t='linear',npl=60)
+        movie = ffmpeg.filter(movie, 'format', 'gbrpf32le')
+        movie = ffmpeg.filter(movie, 'zscale', t='linear',p='bt709')
+        movie = ffmpeg.filter(movie, 'tonemap', 'hable', desat=0)
+        movie = ffmpeg.filter(movie, 'zscale', t='bt709',m='bt709',r='tv')
+        movie = ffmpeg.filter(movie, 'format', 'yuv420p')
+    movie = ffmpeg.filter(movie, 'crop', 'in_w-'+crop[0], 'in_h-'+crop[1])
+    if out == 'jpg':
+        movie = ffmpeg.output(movie, 'temp.jpg', qscale=0, vframes=1)
+    elif out == 'png':
+        movie = ffmpeg.output(movie, 'temp.png', pred='mixed', vframes=1)
+    ffmpeg.run(movie)
+if 'tw' in soc or 'co' in soc:
+    render(filminfo[str(film)]['filename'], rand/framerate, filminfo[str(film)]['hdr'], [str(filminfo[str(film)]['croplr']),str(filminfo[str(film)]['croptb'])], 'jpg')
+if 'tu' in soc or 'ma' in soc or 'file' in soc:
+    render(filminfo[str(film)]['filename'], rand/framerate, filminfo[str(film)]['hdr'], [str(filminfo[str(film)]['croplr']),str(filminfo[str(film)]['croptb'])], 'png')
+## Post/Save Frame
+if soc != ['file']:
     from secrets import credentials
-if soc == 'tw': ## Twitter
-    tc = credentials['twitter']
-    import tweepy
-    t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
-    t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
-elif soc == 'tu': ## Tumblr
-    tc = credentials['tumblr']
-    import pytumblr
-    tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
-elif soc == 'ma': ## Mastodon
-    mc = credentials['mastodon']
-    from mastodon import Mastodon
-    mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
-elif soc == 'co': ## Cohost
-    cc = credentials['cohost']
-    from cohost.models.user import User as CUser
-    ccuser = CUser.login(cc['username'], cc['password'])
-    cclient = ccuser.getProject(cc['handle'])
-elif soc == 'file': ## Straight to file
-    pass
-else:
-    raise ValueError('That service does not exist, or you mistyped it. Please refer to the readme for acceptable names.')
-## Post/Save photo
-if soc == 'tw': ## Twitter
-    img = t1.simple_upload('temp.jpg')
-    t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
-    post = t2.create_tweet(media_ids=[img.media_id])
-    postid = post.data['id']
-elif soc == 'tu': ## Tumblr
-    post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
-    postid = post['id']
-elif soc == 'ma': ## Mastodon
-    img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
-    post = mclient.status_post('', media_ids=img, visibility='public')
-    postid = post['id']
-elif soc == 'co': ## Cohost
-    from cohost.models.block import AttachmentBlock
-    img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")]
-    post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
-    postid = post.postId
-elif soc == 'file': ## Straight to file
-    os.rename('temp.png', str(film)+'-'+str(rand) + '.png')
-    print("Generated: " + str(film)+'-'+str(rand) + '.png')
-    postid = None
+for serv in soc:
+    if serv == 'tw': ## Twitter
+        tc = credentials['twitter']
+        import tweepy
+        t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
+        t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
+        img = t1.simple_upload('temp.jpg')
+        t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
+        post = t2.create_tweet(media_ids=[img.media_id])
+        postid = post.data['id']
+    elif serv == 'tu': ## Tumblr
+        tc = credentials['tumblr']
+        import pytumblr
+        tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
+        post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
+        postid = post['id']
+    elif serv == 'ma': ## Mastodon
+        mc = credentials['mastodon']
+        from mastodon import Mastodon
+        mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+        img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
+        post = mclient.status_post('', media_ids=img, visibility='public')
+        postid = post['id']
+    elif serv == 'co': ## Cohost
+        cc = credentials['cohost']
+        from cohost.models.user import User as CUser
+        from cohost.models.block import AttachmentBlock
+        ccuser = CUser.login(cc['username'], cc['password'])
+        cclient = ccuser.getProject(cc['handle'])
+        img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")]
+        post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
+        postid = post.postId
+    elif serv == 'file': ## Straight to file
+        shutil.copyfile('temp.png', str(film)+'-'+str(rand) + '.png')
+        print("Generated: " + str(film)+'-'+str(rand) + '.png')
+        postid = None
+    else:
+        raise ValueError(f'The listed service "{serv}" is invalid. Options are as follows: tw,tu,ma,co,file')
 ## Update DB
 if postid != None:
-    db.insert({'id': postid, 'repid' : 0, 'film' : film, 'frame': rand, 'platform':soc})
+    db.insert({'repid' : 0, 'film' : film, 'frame': rand,})
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 try:
     os.remove('temp.jpg')
