@@ -1,13 +1,15 @@
+
 """
-ANDROW presents: spdrFramePoster (aka Spider-Verse Bot) 3.0
+ANDROW presents: spdrFramePoster (aka Spider-Verse Bot)
 Code first touched on July 30th, 2019 [https://twitter.com/Andronian42/status/1156018491150876672]
 I am not responsible for any fires, death, spider-related accidents, etc. that this software may cause.
 I *will* try to help, though. If you have trouble, check out the github page:
 https://github.com/Andronian42/spdrFramePoster
 """
+version = ["Andronian42", "spdrFramePoster", "frameposter.py", "v4.0", "November 24th 2023"]
 
 """
-This file is part of spdrFramePoster.
+This script is part of spdrFramePoster.
 
 spdrFramePoster is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +37,7 @@ from tomlkit.toml_file import TOMLFile
 from tinydb import TinyDB, Query
 ## Check arguments/options
 if len(sys.argv[1:])==0:
-    raise SystemExit("frameposter.py - the frame posting script part of spdrFramePoster, made by Androw with <3\n\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)> - One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service> - Service being posted to. See readme for a list of services.\n")
+    raise SystemExit("frameposter.py - the frame posting script part of spdrFramePoster, made by Androw with <3\n\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)> - One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service(s)> - Service(s) being posted to. For multiple services at once, separate with commas. See readme for a list of services.\nRun script with --help or -? for more information")
 else:
     arguments = []
     options = {}
@@ -51,7 +53,9 @@ else:
             else:
                 options[sys.argv.pop(0)[1:]] = sys.argv.pop(1)
     if ('help' in options and options['help'] == True) or ('?' in options and options['?'] == True):
-        raise SystemExit("\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)>    One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service>     Service being posted to. See readme for a list of services.\n\nOptions:\n --help   -?         List arguments and options\n -f <frame number>   Specify exact frame number\n -w <weights>        Comma separated list of weights, if you're picking from multiple videos and want to weight the randomization (e.g. weight of 80,20 means 80% chance of first option and 20% chance of second option)\n")
+        raise SystemExit("\nUsage: python frameposter.py <video(s)> <service>\n\n <video(s)>    One or more videos to post. Must first be configured in the movies.toml config file. Every video has a number in movies.toml; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces).\n <service(s)> - Service(s) being posted to. For multiple services at once, separate with commas. See readme for a list of services.\n\nOptions:\n --help      -?      List arguments and options\n --version   -v      Print version information\n -f <frame number>   Specify exact frame number\n -w <weights>        Comma separated list of weights, if you're picking from multiple videos and want to weight the randomization (e.g. weight of 80,20 means 80% chance of first option and 20% chance of second option, weight of 4,1 would be the exact same)\n --nodb              Post without updating database\n")
+    elif ('version' in options and options['version'] == True) or ('v' in options and options['v'] == True):
+        raise SystemExit(f"{version[1]}/{version[2]} {version[3]} (Last updated: {version[4]})\nMade by {version[0]} with <3")
     elif len(arguments)<2:
         raise ValueError('Needs at least two arguments')
     elif len(arguments)>2:

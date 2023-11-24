@@ -6,9 +6,9 @@ A not-so-dead-simple Python script for posting random video frames to social med
  - Fast and accurate extraction
  - Support for multiple videos and services with command arguments
  - Database to prevent repeat postings
- - Support for Twitter, Tumblr, Mastodon, and Cohost
+ - Support for Twitter, Tumblr, Mastodon, Cohost, and Bluesky/ATP
  - Tag support on Tumblr and Cohost
- - Alt text support on Twitter, Mastodon, and Cohost\
+ - Alt text support on Twitter, Mastodon, Cohost, and Bluesky/ATP
  - Video auto-configuration script
 ## WARNING:
 This script comes with no warranty, and no promise of quality. This project is poorly coded, and it'll likely stay that way.
@@ -20,16 +20,21 @@ I am not responsible for DMCA takedowns, account suspensions, accidental file de
 This script may be used however you want (GPL and all that jazz) but, though it's not a requirement, I would appreciate being informed of other accounts that use this script. Because that would be cool.
 ## Usage
 ### Syntax
-> python frameposter.py \<film number(s)\> \<service\>
+> python frameposter.py \<film number(s)\> \<service(s)\>
  
 `<video(s)>` - One or more videos to post. Must first be configured in the `movies.toml` config file. Every video has a number in `movies.toml`; that number is what this argument takes. To post randomly between multiple videos, list multiple numbers separated by commas (without spaces). 
 
-`<service>` - Service being posted to. Should be one of the following:
+`<service>` - One or more services to post to, separated by commas (without spaces). Should be one or more of the following:
 - Twitter - `tw`
 - Tumblr - `tu`
 - Mastodon - `ma`
 - Cohost - `co`
+- Bluesky/ATP - `bs`
 - File (generate the frame in the script folder) - `file`
+#### Options and Flags
+- `-f <frame number>` - Specify an exact frame to extract
+- `-w <weights>` - Comma-separated list of weights for weighted randomization between multiple input videos. Must input the same number of weights as videos. (e.g. weight of 80,20 means 80% chance of first option and 20% chance of second option, weight of 4,1 would be the exact same)
+- `--nodb` - Refrain from writing to the local database when posting
 ### Dependencies
 - Python 3\.* with pip (newest version recommended, tested 3.9-3.12)
 - FFMPEG built with libzimg (for tonemapping; if your source videos aren't HDR, libzimg shouldn't be a requirement)
@@ -65,6 +70,9 @@ Twitter's API situation is currently unstable due to new leadership. These instr
 #### Cohost
 1. Enter your Cohost `username` (email) and `password` into secrets.py
 2. Enter the handle of the page you want to post to as `handle` in secrets.py
+#### Bluesky/ATP
+1. Grab the `url` of the instance your profile is on (e.g. if you're `spidrvrseframes.bsky.social`, you'd want `https://bsky.social`)
+2. Enter your profile's `username` and `password` into secrets.py (I'd recommend [generating an app password](https://bsky.app/settings/app-passwords) for this step)
 ### Result
 If everything works out, you'll get a bunch of output from FFMPEG (that I'll figure out how to remove in the future) and a frame will soon be posted on the account of your choice. 
 ### Troubleshooting
