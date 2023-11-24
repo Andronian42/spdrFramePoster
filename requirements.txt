@@ -12,7 +12,8 @@ tinydb
 pymediainfo
 
 # These are only required for specific sites.
-tweepy          # Twitter
-pytumblr        # Tumblr
-Mastodon.py     # Mastodon
-cohost			# Cohost
+tweepy          	# Twitter
+pytumblr        	# Tumblr
+Mastodon.py     	# Mastodon
+cohost				# Cohost
+atproto == 0.0.30	# Bluesky

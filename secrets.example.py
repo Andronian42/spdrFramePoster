@@ -43,5 +43,10 @@ credentials = {
         'username':'frameposter@example.com',
         'password':'correcthorsebatterystaple',
         'handle':'FramePoster'
+    },
+    'bluesky':{
+        'url':'https://coolskies.social',
+        'username':'frameposter.coolskies.social',
+        'password':'correcthorsebatterystaple'
     }
 }

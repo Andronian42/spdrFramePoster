@@ -125,7 +125,7 @@ def render(file, rss, rhdr, crop, out):
     ffmpeg.run(movie)
 if 'tw' in soc or 'co' in soc:
     render(filminfo[str(film)]['filename'], rand/framerate, filminfo[str(film)]['hdr'], [str(filminfo[str(film)]['croplr']),str(filminfo[str(film)]['croptb'])], 'jpg')
-if 'tu' in soc or 'ma' in soc or 'file' in soc:
+if 'tu' in soc or 'ma' in soc or 'bs' in soc or 'file' in soc:
     render(filminfo[str(film)]['filename'], rand/framerate, filminfo[str(film)]['hdr'], [str(filminfo[str(film)]['croplr']),str(filminfo[str(film)]['croptb'])], 'png')
 ## Post/Save Frame
 if soc != ['file']:
@@ -162,6 +162,14 @@ for serv in soc:
         img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")]
         post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
         postid = post.postId
+    elif serv == 'bs': ## Bluesky
+        bc = credentials['bluesky']
+        from atproto import Client
+        bclient = Client(bc['url'] + '/xrpc')
+        bclient.login(bc['username'],bc['password'])
+        with open('temp.png', 'rb') as img:
+            bpost = bclient.send_image('', image=img.read(), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
+        postid = (bpost['uri'],bpost['cid'])
     elif serv == 'file': ## Straight to file
         shutil.copyfile('temp.png', str(film)+'-'+str(rand) + '.png')
         print("Generated: {0}\n[{1}]".format(str(film)+'-'+str(rand)+'.png',filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand)))
