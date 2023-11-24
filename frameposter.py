@@ -165,8 +165,10 @@ for serv in soc:
     else:
         raise ValueError(f'The listed service "{serv}" is invalid. Options are as follows: tw,tu,ma,co,file')
 ## Update DB
-if postid != None:
+if not (postid == None or ('nodb' in options and options['nodb'] == True)):
     db.insert({'repid' : 0, 'film' : film, 'frame': rand,})
+else:
+    print("Database has not been modified")
 ## Once again, make sure a frame does not currently exist in the folder the program is being run in
 try:
     os.remove('temp.jpg')
