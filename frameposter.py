@@ -157,15 +157,6 @@ for serv in soc:
         img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
         post = mclient.status_post('', media_ids=img, visibility='public')
         postid = post['id']
-    elif serv == 'co': ## Cohost
-        cc = credentials['cohost']
-        from cohost.models.user import User as CUser
-        from cohost.models.block import AttachmentBlock
-        ccuser = CUser.login(cc['username'], cc['password'])
-        cclient = ccuser.getProject(cc['handle'])
-        img = [AttachmentBlock('temp.jpg', alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")]
-        post = cclient.post('', img, tags=filminfo[str(film)]['tags'])
-        postid = post.postId
     elif serv == 'bs': ## Bluesky
         bc = credentials['bluesky']
         from atproto import Client
