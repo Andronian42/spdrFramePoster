@@ -39,11 +39,6 @@ credentials = {
         'url':'https://mastodon.example',
         'access_token':'[insert access token here]'
     },
-    'cohost':{
-        'username':'frameposter@example.com',
-        'password':'correcthorsebatterystaple',
-        'handle':'FramePoster'
-    },
     'bluesky':{
         'url':'https://coolskies.social',
         'username':'frameposter.coolskies.social',
