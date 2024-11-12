@@ -6,9 +6,9 @@ A not-so-dead-simple Python script for posting random video frames to social med
  - Fast and accurate extraction
  - Support for multiple videos and services with command arguments
  - Database to prevent repeat postings
- - Support for Twitter, Tumblr, Mastodon, Cohost, and Bluesky/ATP
- - Tag support on Tumblr and Cohost
- - Alt text support on Twitter, Mastodon, Cohost, and Bluesky/ATP
+ - Support for Twitter, Tumblr, Mastodon, and Bluesky/ATP
+ - Tag support on Tumblr
+ - Alt text support on Twitter, Mastodon, and Bluesky/ATP
  - Video auto-configuration script
 ## WARNING:
 This script comes with no warranty, and no promise of quality. This project is poorly coded, and it'll likely stay that way.
@@ -28,7 +28,6 @@ This script may be used however you want (GPL and all that jazz) but, though it'
 - Twitter - `tw`
 - Tumblr - `tu`
 - Mastodon - `ma`
-- Cohost - `co`
 - Bluesky/ATP - `bs`
 - File (generate the frame in the script folder) - `file`
 #### Options and Flags
@@ -67,9 +66,6 @@ Twitter's API situation is currently unstable due to new leadership. These instr
 3. Go to your account settings, then click "Developer" on the settings sidebar.
 4. Register an application with `write:media` and `write:statuses` scopes
 5. Copy `Your access token` into secrets.py
-#### Cohost
-1. Enter your Cohost `username` (email) and `password` into secrets.py
-2. Enter the handle of the page you want to post to as `handle` in secrets.py
 #### Bluesky/ATP
 1. Grab the `url` of the instance your profile is on (e.g. if you're `spidrvrseframes.bsky.social`, you'd want `https://bsky.social`)
 2. Enter your profile's `username` and `password` into secrets.py (I'd recommend [generating an app password](https://bsky.app/settings/app-passwords) for this step)
