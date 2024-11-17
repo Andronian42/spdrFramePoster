@@ -6,7 +6,7 @@ I am not responsible for any fires, death, spider-related accidents, etc. that t
 I *will* try to help, though. If you have trouble, check out the github page:
 https://github.com/Andronian42/spdrFramePoster
 """
-version = ["Andronian42", "spdrFramePoster", "frameposter.py", "v4.0", "November 24th 2023"]
+version = ["Andronian42", "spdrFramePoster", "frameposter.py", "v4.1", "November 17th 2024"]
 
 """
 This script is part of spdrFramePoster.
@@ -136,35 +136,71 @@ if soc != ['file']:
     from secrets import credentials
 for serv in soc:
     if serv == 'tw': ## Twitter
-        tc = credentials['twitter']
-        import tweepy
-        t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
-        t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
-        img = t1.simple_upload('temp.jpg')
-        t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
-        post = t2.create_tweet(media_ids=[img.media_id])
-        postid = post.data['id']
+        try:
+            tc = credentials['twitter']
+        except:
+            print("Couldn't find Twitter credentials. Make sure to write them to secrets.py")
+        else:
+            try:
+                import tweepy
+                t1 = tweepy.API(tweepy.OAuth1UserHandler(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret']))
+                t2 = tweepy.Client(consumer_key=tc['consumer_key'], consumer_secret=tc['consumer_secret'], access_token=tc['access_token_key'], access_token_secret=tc['access_token_secret'])
+                img = t1.simple_upload('temp.jpg')
+                t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
+                post = t2.create_tweet(media_ids=[img.media_id])
+                postid = post.data['id']
+            except ModuleNotFoundError:
+                print("Couldn't find tweepy. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
+            except Exception as ex:
+                print(f"Failed to post to Twitter. Hopefully this error will help:\n{ex}")
     elif serv == 'tu': ## Tumblr
-        tc = credentials['tumblr']
-        import pytumblr
-        tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
-        post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
-        postid = post['id']
+        try:
+            tc = credentials['tumblr']
+        except:
+            print("Couldn't find Tumblr credentials. Make sure to write them to secrets.py")
+        else:
+            try:
+                import pytumblr
+                tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
+                post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
+                postid = post['id']
+            except ModuleNotFoundError:
+                print("Couldn't find pytumblr. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
+            except Exception as ex:
+                print(f"Failed to post to Tumblr. Hopefully this error will help:\n{ex}")
     elif serv == 'ma': ## Mastodon
-        mc = credentials['mastodon']
-        from mastodon import Mastodon
-        mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
-        img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
-        post = mclient.status_post('', media_ids=img, visibility='public')
-        postid = post['id']
+        try:
+            mc = credentials['mastodon']
+        except:
+             print("Couldn't find Mastodon credentials. Make sure to write them to secrets.py")
+        else:
+            try:
+                from mastodon import Mastodon
+                mclient = Mastodon(access_token = mc['access_token'], api_base_url = mc['url'])
+                img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
+                post = mclient.status_post('', media_ids=img, visibility='public')
+                postid = post['id']
+            except ModuleNotFoundError:
+                print("Couldn't find mastodon. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
+            except Exception as ex:
+                print(f"Failed to post to Mastodon. Hopefully this error will help:\n{ex}")
     elif serv == 'bs': ## Bluesky
-        bc = credentials['bluesky']
-        from atproto import Client
-        bclient = Client(bc['url'] + '/xrpc')
-        bclient.login(bc['username'],bc['password'])
-        with open('temp.jpg', 'rb') as img:
-            bpost = bclient.send_image('', image=img.read(), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
-        postid = (bpost['uri'],bpost['cid'])
+        try:
+            bc = credentials['bluesky']
+        except:
+            print("Couldn't find Bluesky credentials. Make sure to write them to secrets.py")
+        else:
+            try:
+                from atproto import Client
+                bclient = Client(bc['url'] + '/xrpc')
+                bclient.login(bc['username'],bc['password'])
+                with open('temp.jpg', 'rb') as img:
+                    bpost = bclient.send_image('', image=img.read(), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
+                postid = (bpost['uri'],bpost['cid'])
+            except ModuleNotFoundError:
+                print("Couldn't find atproto. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
+            except Exception as ex:
+                print(f"Failed to post to Bluesky. Hopefully this error will help:\n{ex}")
     elif serv == 'file': ## Straight to file
         shutil.copyfile('temp.png', str(film)+'-'+str(rand) + '.png')
         print("Generated: {0}\n[{1}]".format(str(film)+'-'+str(rand)+'.png',filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand)))
