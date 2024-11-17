@@ -135,6 +135,7 @@ if 'tu' in soc or 'ma' in soc or 'file' in soc:
 if soc != ['file']:
     from secrets import credentials
 for serv in soc:
+    dbpost = False
     if serv == 'tw': ## Twitter
         try:
             tc = credentials['twitter']
@@ -149,6 +150,7 @@ for serv in soc:
                 t1.create_media_metadata(img.media_id, alt_text="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
                 post = t2.create_tweet(media_ids=[img.media_id])
                 postid = post.data['id']
+                dbpost = True
             except ModuleNotFoundError:
                 print("Couldn't find tweepy. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
             except Exception as ex:
@@ -164,6 +166,7 @@ for serv in soc:
                 tclient = pytumblr.TumblrRestClient(tc['consumer_key'], tc['consumer_secret'],tc['access_token_key'],tc['access_token_secret'])
                 post = tclient.create_photo('spidrvrseframes', state="published", tags=filminfo[str(film)]['tags'], data='temp.png', caption=filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand))
                 postid = post['id']
+                dbpost = True
             except ModuleNotFoundError:
                 print("Couldn't find pytumblr. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
             except Exception as ex:
@@ -180,6 +183,7 @@ for serv in soc:
                 img = mclient.media_post('temp.png', description="[" + filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand) + "]")
                 post = mclient.status_post('', media_ids=img, visibility='public')
                 postid = post['id']
+                dbpost = True
             except ModuleNotFoundError:
                 print("Couldn't find mastodon. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
             except Exception as ex:
@@ -197,6 +201,7 @@ for serv in soc:
                 with open('temp.jpg', 'rb') as img:
                     bpost = bclient.send_image('', image=img.read(), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
                 postid = (bpost['uri'],bpost['cid'])
+                dbpost = True
             except ModuleNotFoundError:
                 print("Couldn't find atproto. Make sure to import requirements.txt using 'pip install -r requirements.txt'")
             except Exception as ex:
@@ -204,10 +209,9 @@ for serv in soc:
     elif serv == 'file': ## Straight to file
         shutil.copyfile('temp.png', str(film)+'-'+str(rand) + '.png')
         print("Generated: {0}\n[{1}]".format(str(film)+'-'+str(rand)+'.png',filminfo[str(film)]['videoname'] + ", " + time + ", Frame " + str(rand)))
-        postid = None
     else:
         raise ValueError(f'The listed service "{serv}" is invalid. Options are as follows: tw,tu,ma,co,file')
-    if not (postid == None or ('nodb' in options and options['nodb'] == True)):
+    if not (dbpost == False or ('nodb' in options and options['nodb'] == True)):
         db.insert({'id': postid, 'film' : film, 'frame': rand, 'platform':soc})
 if ('nodb' in options and options['nodb'] == True) and soc != ['file']:
     print("Database has not been modified")
