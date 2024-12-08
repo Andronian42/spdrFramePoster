@@ -15,4 +15,4 @@ pymediainfo
 tweepy          	# Twitter
 pytumblr        	# Tumblr
 Mastodon.py     	# Mastodon
-atproto == 0.0.30	# Bluesky
+atproto == 0.0.56	# Bluesky
