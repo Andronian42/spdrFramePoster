@@ -195,11 +195,12 @@ for serv in soc:
             print("Couldn't find Bluesky credentials. Make sure to write them to secrets.py")
         else:
             try:
-                from atproto import Client
+                from atproto import Client, models
+                from PIL import Image
                 bclient = Client(bc['url'] + '/xrpc')
                 bclient.login(bc['username'],bc['password'])
-                with open('temp.jpg', 'rb') as img:
-                    bpost = bclient.send_image('', image=img.read(), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
+                with open('temp.jpg', 'rb') as img, Image.open('temp.jpg') as pimg:
+                    bpost = bclient.send_image('', image=img.read(), image_aspect_ratio=models.AppBskyEmbedDefs.AspectRatio(height=pimg.height, width=pimg.width), image_alt=f"[{filminfo[str(film)]['videoname']}, {time}, Frame {str(rand)}]")
                 postid = (bpost['uri'],bpost['cid'])
                 dbpost = True
             except ModuleNotFoundError:
